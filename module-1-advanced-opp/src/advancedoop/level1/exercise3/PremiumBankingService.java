@@ -4,14 +4,16 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class PremiumBankingService implements Transferable, BillPayable {
+public class PremiumBankingService implements Transferable, BillPayable, Notifiable {
     private static final Logger logger = Logger.getLogger(PremiumBankingService.class.getName());
     private ArrayList<String> transferHistory;
     private ArrayList<String> paymentHistory;
+    private String notificationPreference;
 
     public PremiumBankingService() {
         this.transferHistory = new ArrayList<>();
         this.paymentHistory = new ArrayList<>();
+        this.notificationPreference = "SMS";
     }
 
     @Override
@@ -48,5 +50,15 @@ public class PremiumBankingService implements Transferable, BillPayable {
         String entry = String.format("Scheduled payment: $%.2f to %s on %s", amount, billerName, date);
         paymentHistory.add(entry);
         logger.log(Level.INFO, entry);
+    }
+
+    @Override
+    public void sendNotification(String message) {
+        logger.log(Level.INFO, "[NOTIFICATION] {0}", message);
+    }
+
+    @Override
+    public String getNotificationPreference() {
+        return notificationPreference;
     }
 }

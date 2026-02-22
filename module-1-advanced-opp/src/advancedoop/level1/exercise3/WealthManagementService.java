@@ -4,18 +4,20 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class WealthManagementService implements Transferable, BillPayable, Investable {
+public class WealthManagementService implements Transferable, BillPayable, Investable, Notifiable {
     private static final Logger logger = Logger.getLogger(WealthManagementService.class.getName());
     private ArrayList<String> transferHistory;
     private ArrayList<String> paymentHistory;
     private ArrayList<String> investmentHistory;
     private double totalInvested;
+    private String notificationPreference;
 
     public WealthManagementService() {
         this.transferHistory = new ArrayList<>();
         this.paymentHistory = new ArrayList<>();
         this.investmentHistory = new ArrayList<>();
         this.totalInvested = 0.0;
+        this.notificationPreference = "PUSH";
     }
 
     @Override
@@ -72,5 +74,15 @@ public class WealthManagementService implements Transferable, BillPayable, Inves
         double returns = totalInvested * 0.07; // 7% return
         logger.log(Level.INFO, "Total investment returns: ${0}", String.format("%.2f", returns));
         return returns;
+    }
+
+    @Override
+    public void sendNotification(String message) {
+        logger.log(Level.INFO, "[NOTIFICATION] {0}", message);
+    }
+
+    @Override
+    public String getNotificationPreference() {
+        return notificationPreference;
     }
 }

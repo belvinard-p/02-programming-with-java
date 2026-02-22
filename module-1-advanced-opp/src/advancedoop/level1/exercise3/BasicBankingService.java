@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class BasicBankingService implements Transferable {
+public class BasicBankingService implements Transferable, Notifiable {
     private static final Logger logger = Logger.getLogger(BasicBankingService.class.getName());
     private ArrayList<String> transferHistory;
+    private String notificationPreference;
 
     public BasicBankingService() {
         this.transferHistory = new ArrayList<>();
+        this.notificationPreference = "EMAIL";
     }
 
     @Override
@@ -27,5 +29,15 @@ public class BasicBankingService implements Transferable {
     @Override
     public String getTransferHistory() {
         return String.join("\n", transferHistory);
+    }
+
+    @Override
+    public void sendNotification(String message) {
+        logger.log(Level.INFO, "[NOTIFICATION] {0}", message);
+    }
+
+    @Override
+    public String getNotificationPreference() {
+        return notificationPreference;
     }
 }
