@@ -261,6 +261,7 @@ Your bank offers multiple account types organized in a clear hierarchy. You need
 - Protected fields: `accountId` (String), `balance` (double), `dateOpened` (String), `isActive` (boolean)
 - Constructor to initialize fields
 - Abstract method: `getAccountType()` returns String
+- Abstract method: `widraw(double amount)` 
 - Abstract method: `calculateMinimumBalance()` returns double
 - Concrete method: `deposit(double amount)` - validates amount > 0, then adds to balance
 - Concrete method: `getBalance()` returns double
