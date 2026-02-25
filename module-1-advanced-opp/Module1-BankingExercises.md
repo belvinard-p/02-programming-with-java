@@ -29,7 +29,7 @@ This comprehensive exercise roadmap ensures 100% coverage of Module 1 concepts t
 
 ## Exercise Progression Structure
 
-```
+```mermaid
 Level 1: Core Concept Drills (Exercises 1.1 - 1.3)
     
 Level 2: Applied Banking Features (Exercises 2.1 - 2.4)
@@ -431,14 +431,14 @@ Your bank needs to create hybrid account types that combine features from multip
 
 **Step 1:** Identify the diamond problem scenario:
 
-```
+```mermaid
          BankAccount
            /      \
           /        \
    SavingsFeature  CheckingFeature
           \        /
            \      /
-        StudentAccount â† Cannot extend both!
+        StudentAccount Cannot extend both!
 ```
 
 **Step 2:** Solve using interfaces:
