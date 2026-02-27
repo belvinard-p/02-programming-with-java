@@ -1,4 +1,4 @@
-package defenssiveprogramming.level3.exercise3;
+package defenssiveprogramming.level3.exercise5;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -111,5 +111,9 @@ public class RobustBankAccount {
 
     public boolean isClosed() {
         return isClosed;
+    }
+
+    public String getAccountNumber() {
+        return accountNumber;
     }
 }

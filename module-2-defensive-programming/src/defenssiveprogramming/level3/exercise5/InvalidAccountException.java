@@ -1,7 +1,7 @@
-package defenssiveprogramming.level3.exercise3;
+package defenssiveprogramming.level3.exercise5;
 
 public class InvalidAccountException extends BankingException {
-    private String accountNumber;
+    private final String accountNumber;
     
     public InvalidAccountException(String accountNumber) {
         super(generateMessage(accountNumber), "INVALID_ACCOUNT");

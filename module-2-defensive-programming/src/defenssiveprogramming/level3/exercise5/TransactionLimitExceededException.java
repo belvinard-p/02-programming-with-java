@@ -1,8 +1,8 @@
-package defenssiveprogramming.level3.exercise3;
+package defenssiveprogramming.level3.exercise5;
 
 public class TransactionLimitExceededException extends BankingException {
-    private double transactionAmount;
-    private double limitAmount;
+    private final double transactionAmount;
+    private final double limitAmount;
     
     public TransactionLimitExceededException(double transactionAmount, double limitAmount) {
         super("Transaction limit exceeded. Amount: $" + transactionAmount + ", Limit: $" + limitAmount, 

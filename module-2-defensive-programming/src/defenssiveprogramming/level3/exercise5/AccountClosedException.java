@@ -1,7 +1,7 @@
-package defenssiveprogramming.level3.exercise3;
+package defenssiveprogramming.level3.exercise5;
 
 public class AccountClosedException extends BankingException {
-    private String closureDate;
+    private final String closureDate;
     
     public AccountClosedException(String accountNumber, String closureDate) {
         super(generateMessage(accountNumber, closureDate), "ACCOUNT_CLOSED");

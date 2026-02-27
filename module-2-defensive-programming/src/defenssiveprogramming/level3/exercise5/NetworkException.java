@@ -1,10 +1,10 @@
-package defenssiveprogramming.level3.exercise3;
+package defenssiveprogramming.level3.exercise5;
 
 public class NetworkException extends BankingException {
-    private boolean retryable;
+    private final boolean retryable;
     
-    public NetworkException(String message, String networkError, boolean retryable) {
-        super(message + (retryable ? " (Retryable)" : " (Not retryable)"), "NETWORK_ERROR");
+    public NetworkException(String message, String errorCode, boolean retryable) {
+        super(message + (retryable ? " (Retryable)" : " (Not retryable)"), errorCode);
         this.retryable = retryable;
     }
 

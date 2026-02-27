@@ -1,7 +1,7 @@
-package defenssiveprogramming.level3.exercise3;
+package defenssiveprogramming.level3.exercise5;
 
 public class BankingException extends Exception {
-    private String errorCode;
+    private final String errorCode;
     
     public BankingException(String message, String errorCode) {
         super(message);
