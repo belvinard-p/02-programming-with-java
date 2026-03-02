@@ -1186,7 +1186,8 @@ Implement `AutoCloseable` interface for resources and use try-with-resources sta
 ## Exercise 3.6: File I/O for Banking Data Persistence
 
 ### Banking Scenario Context
-Your banking system needs to save account data, transaction logs, and customer information to files. You also need to read this data when the system starts up.
+Your banking system needs to save account data, transaction logs, and customer information to files. 
+You also need to read this data when the system starts up.
 
 ### Technical Objectives
 - Implement file writing operations
@@ -1289,7 +1290,9 @@ Implement JSON or XML serialization for more structured data storage. Add encryp
 ## Exercise 4.1: Complete Banking Digital Platform
 
 ### Banking Scenario Context
-You are architecting a complete digital banking platform that integrates all the concepts you've learned. This system must handle multiple account types, diverse customer types, various transaction capabilities, robust error handling, and data persistence. The system must be scalable, maintainable, and follow SOLID principles.
+You are architecting a complete digital banking platform that integrates all the concepts you've learned. This system must handle multiple account types, 
+diverse customer types, various transaction capabilities, robust error handling, and data persistence. The system must be scalable, 
+maintainable, and follow SOLID principles.
 
 ### Technical Objectives
 - Integrate ALL concepts from Module 1
