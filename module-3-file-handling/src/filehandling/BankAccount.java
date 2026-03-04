@@ -31,7 +31,7 @@ public class BankAccount {
 
     @Override
     public String toString() {
-        return accountId + " | " + ownerName + " | " + balance + " " + CURRENCY;
+        return  accountId + " | " + ownerName + " | " + balance + " " + CURRENCY;
     }
 
     public void displayAccountInfo() {
