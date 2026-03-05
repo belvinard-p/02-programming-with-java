@@ -9,6 +9,7 @@ public class Transaction {
     private static final Logger logger = Logger.getLogger(Transaction.class.getName());
     private static final String SEPARATOR = ";";
     private static final String CURRENCY = "xaf";
+
     private final String accountId;
     private final String type;
     private final double amount;
