@@ -1,7 +1,7 @@
 ## 📝 Exercise No – 5
 **Date :** 2024  
 **Technologie / Framework :** Java SE  
-**Concept clé :** File I/O, Clean Code, Testing
+**Concept clé :** File I/O, Clean Code, Testing, Try-With-Resources
 
 ---
 
@@ -20,11 +20,16 @@ Enfin, un mécanisme de sauvegarde doit permettre de copier et restaurer les don
 - Implémenter des tests structurés avec validation
 - Utiliser Java Logger au lieu de System.out.println
 - Respecter les standards SonarQube (pas de duplication, pas de magic values)
+- Implémenter File I/O avec try-with-resources
+- Gérer les exceptions IOException correctement
+- Différencier write mode vs append mode
 
 ---
 
 ### 3️⃣ Analyse / Planification
 - Créer BankAccount avec encapsulation (final fields, getters)
+- Créer Transaction avec toCSV() pour format structuré
+- Créer AccountDataWriter avec 3 méthodes (saveAccount, saveMultipleAccounts, appendTransaction)
 - Créer FileIOTest avec méthodes de test séparées
 - Définir des constantes pour éviter la duplication de code
 - Utiliser des helper methods pour la réutilisabilité
@@ -32,33 +37,59 @@ Enfin, un mécanisme de sauvegarde doit permettre de copier et restaurer les don
 ---
 
 ### 4️⃣ Implémentation / Étapes
+
+#### Phase 1: Classes de base
 1. Création de BankAccount avec attributs final (accountId, ownerName, balance)
 2. Implémentation de toString() et displayAccountInfo() avec Logger
-3. Création de FileIOTest avec constantes TEST_ACCOUNT_ID, TEST_OWNER_NAME, TEST_BALANCE
-4. Implémentation de testCreateSingleAccount() avec validation
-5. Implémentation de testCreateMultipleAccounts() avec array d'accounts
-6. Création de createTestAccount() helper method pour réutilisabilité
-7. Correction des warnings SonarQube (duplication de literals, constants)
+3. Création de Transaction avec toCSV() pour export CSV
+4. Ajout de CURRENCY constant dans BankAccount et Transaction
 
-> Difficulté rencontrée : Warnings SonarQube sur duplication de literals et paramètres inutilisés
+#### Phase 2: File I/O - AccountDataWriter
+5. Création de saveAccount() avec try-with-resources
+6. Utilisation de Files.newBufferedWriter() pour écriture
+7. Gestion IOException avec contextual information lors du rethrow
+8. Création de saveMultipleAccounts() avec boucle for
+9. Implémentation de appendTransaction() avec StandardOpenOption.APPEND
+
+#### Phase 3: Tests
+10. Création de FileIOTest avec constantes (TEST_ACCOUNT_ID, TEST_OWNER_NAME, TEST_BALANCE, TEST_FILE, CSV_FILE, TRANSACTION_FILE)
+11. Implémentation de testSaveAccountToFile() avec try-catch
+12. Implémentation de testSaveMultipleAccountToFile()
+13. Implémentation de testAppendTransactionToFile() avec boucle
+14. Création de helper methods: createTestAccount(), createTestAccounts(), createTestTransaction(), createTestTransactions()
+15. Ajout de constantes TEST_PASSED et TEST_FAILED pour éviter duplication
+
+> Difficultés rencontrées : 
+> - Try-with-resources syntax avec Files.newBufferedWriter()
+> - Différence entre write mode et append mode
+> - StandardOpenOption.APPEND au lieu de boolean true
+> - Resource leak si BufferedWriter non fermé
+> - Exception handling avec rethrow et contextual information
 
 ---
 
 ### 5️⃣ Problèmes rencontrés et solutions
 | Problème | Cause | Solution |
 |----------|------|-------|
-| Getters sur une ligne non standard | Formatage compact | Reformater chaque getter sur plusieurs lignes |
-| Duplication literal "Ahmad Hassan" | Valeur répétée 3 fois | Créer constante TEST_OWNER_NAME |
-| Méthode validateAccount() inutilisée | Appelée une seule fois avec mêmes valeurs | Supprimer et inliner la validation |
-| Code commenté dans BankAccount | Ancien code logger.log | Supprimer le code commenté |
+| Resource leak avec BufferedWriter | Writer créé mais jamais fermé | Utiliser try-with-resources |
+| Files.newBufferedWriter(path, true) ne compile pas | Méthode n'accepte pas boolean | Utiliser StandardOpenOption.APPEND |
+| Exception swallowed dans catch | Catch IOException mais ne rethrow pas | Rethrow avec new IOException(message, cause) |
+| Duplication de code pour créer accounts | Même array dans 2 méthodes | Créer helper method createTestAccounts() |
+| appendTransaction reçoit array au lieu de single | Type mismatch Transaction[] vs Transaction | Boucler sur array et appeler pour chaque transaction |
+| Logger pas final | Oubli du mot-clé final | Ajouter final à tous les loggers statiques |
+| CURRENCY constant définie mais non utilisée | Hardcoded "xaf" dans toString() | Remplacer par CURRENCY constant |
+| Duplication literal "❌ Test failed: {0}" | Répété 3 fois | Créer constantes TEST_PASSED et TEST_FAILED |
 
 ---
 
 ### 6️⃣ Tests effectués
 - testCreateSingleAccount() : Création et validation d'un compte unique ✅
-- testCreateMultipleAccounts() : Création de 5 comptes différents ✅
+- testCreateMultipleAccounts() : Création de 7 comptes différents ✅
+- testSaveAccountToFile() : Sauvegarde d'un compte dans test_account.txt ✅
+- testSaveMultipleAccountToFile() : Sauvegarde de 7 comptes dans csv_account.csv ✅
+- testAppendTransactionToFile() : Ajout de 4 transactions dans transactions.csv ✅
 - Validation des données (accountId, ownerName, balance) ✅
-- Affichage avec Logger au lieu de System.out.println ✅
+- Vérification des fichiers créés dans D:\java\ ✅
 
 ---
 
@@ -78,7 +109,7 @@ Enfin, un mécanisme de sauvegarde doit permettre de copier et restaurer les don
 
 #### 📊 Professional Logging
 - **Logger over System.out**: Utiliser java.util.logging.Logger
-- **Log Levels**: INFO pour succès, WARNING pour échecs
+- **Log Levels**: INFO pour succès, SEVERE pour erreurs
 - **Parameterized Logging**: logger.log(Level.INFO, "{0}", value)
 - **Method References**: logger.log(Level.INFO, this::toString)
 
@@ -99,26 +130,46 @@ Enfin, un mécanisme de sauvegarde doit permettre de copier et restaurer les don
 - **Scalability Thinking**: Code qui fonctionne pour 1 ou 100 comptes
 - **Maintainability**: Code facile à lire et modifier par d'autres développeurs
 
+#### 📁 File I/O Mastery (NOUVEAU)
+- **Try-With-Resources**: Automatic resource management pour éviter memory leaks
+- **BufferedWriter**: Écriture efficace dans les fichiers
+- **Files.newBufferedWriter()**: API moderne Java NIO pour file operations
+- **StandardOpenOption**: CREATE, APPEND pour contrôler le mode d'écriture
+- **Write vs Append**: Différence entre écraser et ajouter au fichier
+- **IOException Handling**: Proper exception propagation avec contextual information
+- **CSV Format**: Utiliser toCSV() pour format structuré et parsable
+
+#### 🔐 Exception Handling Best Practices (NOUVEAU)
+- **Try-With-Resources Syntax**: `try (Resource r = ...) { }` pour auto-close
+- **Exception Propagation**: Déclarer `throws IOException` dans signature
+- **Contextual Rethrow**: `throw new IOException("context", originalException)`
+- **Resource Cleanup**: Garantir fermeture même en cas d'erreur
+- **Multiple Resources**: Possibilité de déclarer plusieurs resources séparées par ;
+
 ---
 
 ### 8️⃣ Améliorations possibles
 - Ajouter JUnit pour tests unitaires professionnels
-- Implémenter assertions avec assertEquals() au lieu de if/else
-- Créer une classe TestDataBuilder dédiée
-- Ajouter tests négatifs (valeurs null, négatives)
+- Implémenter AccountDataReader pour lire les fichiers
+- Créer BackupManager pour backup/restore
+- Ajouter tests négatifs (fichier inexistant, permissions)
 - Implémenter test coverage reporting
 - Ajouter validation dans le constructeur BankAccount
+- Utiliser Path au lieu de String pour les chemins de fichiers
+- Implémenter file locking pour concurrent access
 
 ---
 
 ### 9️⃣ Résumé personnel
-> J'ai appris à écrire du code "senior level" en appliquant les principes de Clean Code. La différence principale : éviter les "magic values", utiliser des constants, des helper methods, et Logger au lieu de System.out.println. J'ai compris que la qualité du code ne se mesure pas seulement au fait qu'il fonctionne, mais aussi à sa lisibilité, maintenabilité et respect des standards (SonarQube). Les compétences clés acquises : constants, DRY principle, encapsulation, professional logging, et test structure. C'est la base pour devenir un software engineer professionnel.
+> J'ai appris à écrire du code "senior level" en appliquant les principes de Clean Code ET en maîtrisant File I/O avec Java. La compétence clé : **try-with-resources** pour automatic resource management - c'est ESSENTIEL pour éviter les memory leaks. J'ai compris la différence entre write mode (écrase) et append mode (ajoute), et comment utiliser StandardOpenOption.APPEND. L'exception handling avec contextual information lors du rethrow est crucial pour le debugging en production. Le pattern est clair : catch IOException, log l'erreur, puis rethrow avec plus de contexte (accountId, filename). J'ai aussi appliqué DRY principle en créant des helper methods pour éviter la duplication de code. La combinaison Clean Code + File I/O + Exception Handling = compétences de base d'un software engineer professionnel.
 
 ---
 
 ### 🔹 Section hebdomadaire (facultative)
-- Prochaine étape : Implémenter la persistence des comptes dans des fichiers (File I/O)
-- Objectif : Sauvegarder et charger les BankAccount depuis des fichiers texte
-- Compétences à développer : FileWriter, FileReader, BufferedWriter, BufferedReader
+- **Accompli cette semaine** : File I/O writing (saveAccount, saveMultipleAccounts, appendTransaction)
+- **Prochaine étape** : Implémenter AccountDataReader pour lire les fichiers
+- **Objectif** : Charger les BankAccount depuis des fichiers texte et reconstruire les objets
+- **Compétences à développer** : FileReader, BufferedReader, String parsing, data reconstruction
+- **Challenge** : Parser le CSV et créer des objets BankAccount/Transaction à partir des lignes
 
 ---
