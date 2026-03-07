@@ -26,6 +26,7 @@ public class FileIOTest {
         testAppendTransactionToFile();
         testLoadAccount();
         testLoadMultipleAccounts();
+        testLoadTransactions();
         LOGGER.info("=== All tests completed ===");
     }
 
@@ -128,6 +129,21 @@ public class FileIOTest {
                 account.displayAccountInfo();
             }
             LOGGER.log(Level.INFO, TEST_PASSED, loadedAccounts.length + " accounts loaded successfully");
+        } catch (IOException e) {
+            LOGGER.log(Level.SEVERE, TEST_FAILED, e.getMessage());
+        }
+    }
+
+    private static void testLoadTransactions() {
+        LOGGER.info("--- Test: Load Transactions from File ---");
+        AccountDataReader reader = new AccountDataReader();
+
+        try {
+            Transaction[] loadedTransactions = reader.loadTransactions(TRANSACTION_FILE);
+            for (Transaction transaction : loadedTransactions) {
+                transaction.displayAccountInfo();
+            }
+            LOGGER.log(Level.INFO, TEST_PASSED, loadedTransactions.length + " transactions loaded successfully");
         } catch (IOException e) {
             LOGGER.log(Level.SEVERE, TEST_FAILED, e.getMessage());
         }
