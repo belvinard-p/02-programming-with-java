@@ -5,7 +5,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class FileIOTest {
-    private static final Logger logger = Logger.getLogger(FileIOTest.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(FileIOTest.class.getName());
     private static final String TEST_ACCOUNT_ID = "001";
     private static final String TEST_OWNER_NAME = "Ahmad Hassan";
     private static final double TEST_BALANCE = 5000.0;
@@ -18,18 +18,19 @@ public class FileIOTest {
     private static final String TRANSACTION_WITHDRAWAL = "WITHDRAWAL";
 
     public static void main(String[] args) {
-        logger.info("=== File I/O Test Suite ===");
+        LOGGER.info("=== File I/O Test Suite ===");
         testCreateSingleAccount();
         testCreateMultipleAccounts();
         testSaveAccountToFile();
         testSaveMultipleAccountToFile();
         testAppendTransactionToFile();
         testLoadAccount();
-        logger.info("=== All tests completed ===");
+        testLoadMultipleAccounts();
+        LOGGER.info("=== All tests completed ===");
     }
 
     private static void testCreateSingleAccount() {
-        logger.info("--- Test: Create Single Bank Account ---");
+        LOGGER.info("--- Test: Create Single Bank Account ---");
 
         BankAccount account = createTestAccount(TEST_ACCOUNT_ID, TEST_OWNER_NAME, TEST_BALANCE);
         account.displayAccountInfo();
@@ -37,14 +38,14 @@ public class FileIOTest {
         if (account.getAccountId().equals(TEST_ACCOUNT_ID) &&
                 account.getOwnerName().equals(TEST_OWNER_NAME) &&
                 account.getBalance() == TEST_BALANCE) {
-            logger.log(Level.INFO, TEST_PASSED, "Account created successfully");
+            LOGGER.log(Level.INFO, TEST_PASSED, "Account created successfully");
         } else {
-            logger.log(Level.WARNING, "\u274c Test failed: Account data mismatch");
+            LOGGER.log(Level.WARNING, TEST_FAILED, "Account data mismatch");
         }
     }
 
     private static void testCreateMultipleAccounts() {
-        logger.info("--- Test: Create Multiple Bank Accounts ---");
+        LOGGER.info("--- Test: Create Multiple Bank Accounts ---");
 
         BankAccount[] accounts = createTestAccounts();
 
@@ -52,39 +53,39 @@ public class FileIOTest {
             account.displayAccountInfo();
         }
 
-        logger.log(Level.INFO, TEST_PASSED, accounts.length + " accounts created");
+        LOGGER.log(Level.INFO, TEST_PASSED, accounts.length + " accounts created");
     }
 
     private static void testSaveAccountToFile() {
-        logger.info("--- Test: Save Account to File ---");
+        LOGGER.info("--- Test: Save Account to File ---");
 
         BankAccount account = createTestAccount(TEST_ACCOUNT_ID, TEST_OWNER_NAME, TEST_BALANCE);
         AccountDataWriter writer = new AccountDataWriter();
 
         try {
             writer.saveAccount(account, TEST_FILE);
-            logger.log(Level.INFO, TEST_PASSED, "Account saved successfully");
+            LOGGER.log(Level.INFO, TEST_PASSED, "Account saved successfully");
         } catch (IOException e) {
-            logger.log(Level.SEVERE, TEST_FAILED, e.getMessage());
+            LOGGER.log(Level.SEVERE, TEST_FAILED, e.getMessage());
         }
     }
 
     private static void testSaveMultipleAccountToFile() {
-        logger.info("--- Test: Save Multiple Accounts to File ---");
+        LOGGER.info("--- Test: Save Multiple Accounts to File ---");
 
         BankAccount[] accounts = createTestAccounts();
         AccountDataWriter writer = new AccountDataWriter();
 
         try {
             writer.saveMultipleAccounts(accounts, CSV_FILE);
-            logger.log(Level.INFO, TEST_PASSED, "Multiple Accounts saved successfully to " + CSV_FILE);
+            LOGGER.log(Level.INFO, TEST_PASSED, "Multiple Accounts saved successfully to " + CSV_FILE);
         } catch (IOException e) {
-            logger.log(Level.SEVERE, TEST_FAILED, e.getMessage());
+            LOGGER.log(Level.SEVERE, TEST_FAILED, e.getMessage());
         }
     }
 
     private static void testAppendTransactionToFile() {
-        logger.info("--- Test: Append Transaction to File ---");
+        LOGGER.info("--- Test: Append Transaction to File ---");
         AccountDataWriter writer = new AccountDataWriter();
         Transaction[] transactions = createTestTransactions();
 
@@ -92,14 +93,14 @@ public class FileIOTest {
             for (Transaction transaction : transactions) {
                 writer.appendTransaction(TRANSACTION_FILE, transaction);
             }
-            logger.log(Level.INFO, TEST_PASSED, transactions.length + " transactions appended successfully");
+            LOGGER.log(Level.INFO, TEST_PASSED, transactions.length + " transactions appended successfully");
         } catch (IOException e) {
-            logger.log(Level.SEVERE, TEST_FAILED, e.getMessage());
+            LOGGER.log(Level.SEVERE, TEST_FAILED, e.getMessage());
         }
     }
 
     private static void testLoadAccount() {
-        logger.info("--- Test: Load Account from File ---");
+        LOGGER.info("--- Test: Load Account from File ---");
         AccountDataReader reader = new AccountDataReader();
 
         try {
@@ -108,15 +109,30 @@ public class FileIOTest {
             if (loadedAccount.getAccountId().equals(TEST_ACCOUNT_ID) &&
                     loadedAccount.getOwnerName().equals(TEST_OWNER_NAME) &&
                     loadedAccount.getBalance() == TEST_BALANCE) {
-                logger.log(Level.INFO, TEST_PASSED);
-            }else {
-                logger.log(Level.WARNING, TEST_FAILED);
+                LOGGER.log(Level.INFO, TEST_PASSED, "Account loaded successfully");
+            } else {
+                LOGGER.log(Level.WARNING, TEST_FAILED, "Account data mismatch");
             }
-            logger.log(Level.INFO, "Data loaded successfully");
         } catch (IOException e) {
-            logger.log(Level.SEVERE, TEST_FAILED, e.getMessage());
+            LOGGER.log(Level.SEVERE, TEST_FAILED, e.getMessage());
         }
     }
+
+    private static void testLoadMultipleAccounts() {
+        LOGGER.info("--- Test: Load Multiple Accounts from File ---");
+        AccountDataReader reader = new AccountDataReader();
+
+        try {
+            BankAccount[] loadedAccounts = reader.loadMultipleAccounts(CSV_FILE);
+            for (BankAccount account : loadedAccounts) {
+                account.displayAccountInfo();
+            }
+            LOGGER.log(Level.INFO, TEST_PASSED, loadedAccounts.length + " accounts loaded successfully");
+        } catch (IOException e) {
+            LOGGER.log(Level.SEVERE, TEST_FAILED, e.getMessage());
+        }
+    }
+
     private static BankAccount createTestAccount(String id, String name, double balance) {
         return new BankAccount(id, name, balance);
     }
