@@ -27,6 +27,8 @@ public class FileIOTest {
         testLoadAccount();
         testLoadMultipleAccounts();
         testLoadTransactions();
+        testGenerateDailyReport();
+        testArchiveOldLogs();
         LOGGER.info("=== All tests completed ===");
     }
 
@@ -186,7 +188,30 @@ public class FileIOTest {
                 createTestTransaction("005", TRANSACTION_DEPOSIT, 750.0),
                 createTestTransaction("006", TRANSACTION_WITHDRAWAL, 150.0),
                 createTestTransaction("007", TRANSACTION_DEPOSIT, 2000.0)
-
         };
+    }
+
+    private static void testGenerateDailyReport() {
+        LOGGER.info("--- Test: Generate Daily Report ---");
+        TransactionLogger logger = new TransactionLogger();
+
+        try {
+            logger.generateDailyReport(TRANSACTION_FILE, "02-programing-with-java/daily_report.txt");
+            LOGGER.log(Level.INFO, TEST_PASSED, "Daily report generated successfully");
+        } catch (IOException e) {
+            LOGGER.log(Level.SEVERE, TEST_FAILED, e.getMessage());
+        }
+    }
+
+    private static void testArchiveOldLogs() {
+        LOGGER.info("--- Test: Archive Old Logs ---");
+        TransactionLogger logger = new TransactionLogger();
+
+        try {
+            logger.archiveOldLogs(TRANSACTION_FILE, "02-programing-with-java/transactions_archive.csv");
+            LOGGER.log(Level.INFO, TEST_PASSED, "Logs archived successfully");
+        } catch (IOException e) {
+            LOGGER.log(Level.SEVERE, TEST_FAILED, e.getMessage());
+        }
     }
 }
