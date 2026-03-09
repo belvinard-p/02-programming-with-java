@@ -1,0 +1,36 @@
+=== DAILY TRANSACTION REPORT ===
+
+Total Transactions: 14
+Total Deposits: 8500.0 xaf
+Total Withdrawals: 1300.0 xaf
+Net Change: 7200.0 xaf
+
+=== BY ACCOUNT ===
+Account 001:
+  Transactions: 2
+  Deposits: 1000.0 xaf
+  Withdrawals: 0.0 xaf
+Account 002:
+  Transactions: 2
+  Deposits: 0.0 xaf
+  Withdrawals: 400.0 xaf
+Account 003:
+  Transactions: 2
+  Deposits: 2000.0 xaf
+  Withdrawals: 0.0 xaf
+Account 004:
+  Transactions: 2
+  Deposits: 0.0 xaf
+  Withdrawals: 600.0 xaf
+Account 005:
+  Transactions: 2
+  Deposits: 1500.0 xaf
+  Withdrawals: 0.0 xaf
+Account 006:
+  Transactions: 2
+  Deposits: 0.0 xaf
+  Withdrawals: 300.0 xaf
+Account 007:
+  Transactions: 2
+  Deposits: 4000.0 xaf
+  Withdrawals: 0.0 xaf
