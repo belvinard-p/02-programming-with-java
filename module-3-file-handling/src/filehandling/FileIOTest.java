@@ -12,6 +12,8 @@ public class FileIOTest {
     private static final String TEST_FILE = "02-programing-with-java/test_account.txt";
     private static final String CSV_FILE = "02-programing-with-java/multiple_account.csv";
     private static final String TRANSACTION_FILE = "02-programing-with-java/transactions.csv";
+    private static final String BACKUP_FILE = "02-programing-with-java/test_account_backup.txt";
+    private static final String RESTORE_FILE = "02-programing-with-java/test_account_restored.txt";
     private static final String TEST_PASSED = "\u2705 Test passed: {0}";
     private static final String TEST_FAILED = "\u274c Test failed: {0}";
     private static final String TRANSACTION_DEPOSIT = "DEPOSIT";
@@ -29,6 +31,8 @@ public class FileIOTest {
         testLoadTransactions();
         testGenerateDailyReport();
         testArchiveOldLogs();
+        testBackupAndRestore();
+        testVerifyBackupIntegrity();
         LOGGER.info("=== All tests completed ===");
     }
 
@@ -210,6 +214,37 @@ public class FileIOTest {
         try {
             logger.archiveOldLogs(TRANSACTION_FILE, "02-programing-with-java/transactions_archive.csv");
             LOGGER.log(Level.INFO, TEST_PASSED, "Logs archived successfully");
+        } catch (IOException e) {
+            LOGGER.log(Level.SEVERE, TEST_FAILED, e.getMessage());
+        }
+    }
+
+    private static void testBackupAndRestore() {
+        LOGGER.info("--- Test: Backup and Restore ---");
+        BackupManager backupManager = new BackupManager();
+
+        try {
+            backupManager.createBackup(TEST_FILE, BACKUP_FILE);
+            LOGGER.log(Level.INFO, TEST_PASSED, "Backup created successfully");
+            
+            backupManager.restoreFromBackup(BACKUP_FILE, RESTORE_FILE);
+            LOGGER.log(Level.INFO, TEST_PASSED, "Restore completed successfully");
+        } catch (IOException e) {
+            LOGGER.log(Level.SEVERE, TEST_FAILED, e.getMessage());
+        }
+    }
+
+    private static void testVerifyBackupIntegrity() {
+        LOGGER.info("--- Test: Verify Backup Integrity ---");
+        BackupManager backupManager = new BackupManager();
+
+        try {
+            boolean isValid = backupManager.verifyBackupIntegrity(TEST_FILE, BACKUP_FILE);
+            if (isValid) {
+                LOGGER.log(Level.INFO, TEST_PASSED, "Backup integrity verified");
+            } else {
+                LOGGER.log(Level.WARNING, TEST_FAILED, "Backup integrity check failed");
+            }
         } catch (IOException e) {
             LOGGER.log(Level.SEVERE, TEST_FAILED, e.getMessage());
         }
