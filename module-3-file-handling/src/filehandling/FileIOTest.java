@@ -14,6 +14,8 @@ public class FileIOTest {
     private static final String TRANSACTION_FILE = "02-programing-with-java/transactions.csv";
     private static final String BACKUP_FILE = "02-programing-with-java/test_account_backup.txt";
     private static final String RESTORE_FILE = "02-programing-with-java/test_account_restored.txt";
+    private static final String CSV_BACKUP_FILE = "02-programing-with-java/multiple_account_backup.csv";
+    private static final String CSV_RESTORE_FILE = "02-programing-with-java/multiple_account_restored.csv";
     private static final String TEST_PASSED = "\u2705 Test passed: {0}";
     private static final String TEST_FAILED = "\u274c Test failed: {0}";
     private static final String TRANSACTION_DEPOSIT = "DEPOSIT";
@@ -33,6 +35,8 @@ public class FileIOTest {
         testArchiveOldLogs();
         testBackupAndRestore();
         testVerifyBackupIntegrity();
+        testBackupAndRestoreMultipleAccounts();
+        testVerifyMultipleAccountsBackupIntegrity();
         LOGGER.info("=== All tests completed ===");
     }
 
@@ -245,6 +249,41 @@ public class FileIOTest {
             } else {
                 LOGGER.log(Level.WARNING, TEST_FAILED, "Backup integrity check failed");
             }
+        } catch (IOException e) {
+            LOGGER.log(Level.SEVERE, TEST_FAILED, e.getMessage());
+        }
+    }
+
+    private static void testBackupAndRestoreMultipleAccounts() {
+        LOGGER.info("--- Test: Backup and Restore Multiple Accounts ---");
+        BackupManager backupManager = new BackupManager();
+
+        try {
+            backupManager.createBackup(CSV_FILE, CSV_BACKUP_FILE);
+            LOGGER.log(Level.INFO, TEST_PASSED, "Multiple accounts backup created");
+
+            backupManager.restoreFromBackup(CSV_BACKUP_FILE, CSV_RESTORE_FILE);
+            LOGGER.log(Level.INFO, TEST_PASSED, "Multiple accounts restored");
+        } catch (IOException e) {
+            LOGGER.log(Level.SEVERE, TEST_FAILED, e.getMessage());
+        }
+    }
+
+    private static void testVerifyMultipleAccountsBackupIntegrity() {
+        LOGGER.info("--- Test: Verify Multiple Accounts Backup Integrity ---");
+        BackupManager backupManager = new BackupManager();
+        AccountDataReader reader = new AccountDataReader();
+
+        try {
+            boolean isValid = backupManager.verifyBackupIntegrity(CSV_FILE, CSV_BACKUP_FILE);
+            if (isValid) {
+                LOGGER.log(Level.INFO, TEST_PASSED, "Multiple accounts backup integrity verified");
+            } else {
+                LOGGER.log(Level.WARNING, TEST_FAILED, "Multiple accounts backup integrity check failed");
+            }
+
+            BankAccount[] restoredAccounts = reader.loadMultipleAccounts(CSV_RESTORE_FILE);
+            LOGGER.log(Level.INFO, TEST_PASSED, restoredAccounts.length + " accounts restored and loaded");
         } catch (IOException e) {
             LOGGER.log(Level.SEVERE, TEST_FAILED, e.getMessage());
         }
