@@ -1,0 +1,25 @@
+=== DAILY BANKING REPORT ===
+
+--- Account Summary ---
+Total Accounts: 2
+Total System Balance: 6100.0
+
+SAVINGS: 2 accounts ($6100.0)
+
+=== Statement: ACC001 ===
+Holder: pouadjeu
+Balance: 2000.0
+Interest Rate: 0.03
+Monthly Fee: 2.0
+
+=== Statement: ACC002 ===
+Holder: toto
+Balance: 4100.0
+Interest Rate: 0.03
+Monthly Fee: 2.0
+
+--- Transaction Summary ---
+Total Transactions: 1
+Completed: 1 | Failed: 0
+
+DEPOSIT: 1 transactions ($100.0)
